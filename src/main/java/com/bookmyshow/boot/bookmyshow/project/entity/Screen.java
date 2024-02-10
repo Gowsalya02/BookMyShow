@@ -19,7 +19,7 @@ import lombok.Setter;
 public class Screen 
 {
 	@Id
-	private int screenNumber;
+	private int screenId;
 	private LocalTime showTime;
 	private LocalDate showDate;
 	private int totalNoOfSheet;
