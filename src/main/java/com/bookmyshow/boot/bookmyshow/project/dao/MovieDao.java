@@ -54,7 +54,7 @@ public class MovieDao
 		return null;//movie object is not found for the given ID
 	}
 	
-	public List<Movie> findAllmovies()
+	public List<Movie> findAllMovies()
 	{
 		return movieRepository.findAll();
 	}
