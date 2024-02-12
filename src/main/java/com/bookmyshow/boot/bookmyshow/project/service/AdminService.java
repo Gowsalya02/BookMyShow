@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.AdminDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Admin;
+import com.bookmyshow.boot.bookmyshow.project.exception.AdminNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -37,7 +38,7 @@ public class AdminService
 	    structure.setData(admin);
 		return  new ResponseEntity<ResponseStructure<Admin>>(structure,HttpStatus.FOUND);
 		}
-		return null;//admin object not found for the given id
+		throw new AdminNotFound("admin object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Admin>> deleteAdmin(int adminId)
@@ -52,7 +53,7 @@ public class AdminService
 			structure.setData(admin);
 		return new ResponseEntity<ResponseStructure<Admin>>(structure,HttpStatus.OK);
 		}
-		return null;//admin object not found for the given id
+		throw new AdminNotFound("admin object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Admin>> updateAdmin(Admin admin,int adminId)
@@ -66,7 +67,7 @@ public class AdminService
 		structure.setData(adminDao.updateAdmin(admin, adminId));
 		return new ResponseEntity<ResponseStructure<Admin>>(structure,HttpStatus.OK);
 		}
-		return null;//admin object not found for the given id
+		throw new AdminNotFound("admin object not found for the given id");
 	}
 	
 	public List<Admin> findAllAdmins()

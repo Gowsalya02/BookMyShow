@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.TheatreDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Theatre;
+import com.bookmyshow.boot.bookmyshow.project.exception.TheatreNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -37,7 +38,7 @@ public class TheatreService
 	    structure.setData(theatre);
 		return  new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.FOUND);
 		}
-		return null;//theatre object not found for the given id
+		throw new TheatreNotFound("theatre object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> deleteTheatre(int theatreId)
@@ -52,7 +53,7 @@ public class TheatreService
 			structure.setData(theatre);
 		return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 		}
-		return null;//theatre object not found for the given id
+		throw new TheatreNotFound("theatre object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> updateTheatre(Theatre theatre,int theatreId)
@@ -66,7 +67,7 @@ public class TheatreService
 		structure.setData(theatreDao.updateTheatre(theatre, theatreId));
 		return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 		}
-		return null;//theatre object not found for the given id
+		throw new TheatreNotFound("theatre object not found for the given id");
 	}
 	
 	public List<Theatre> findAllTheatres()

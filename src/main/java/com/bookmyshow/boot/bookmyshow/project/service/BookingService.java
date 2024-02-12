@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.BookingDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Booking;
+import com.bookmyshow.boot.bookmyshow.project.exception.BookingNotDone;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -37,7 +38,7 @@ public class BookingService
 	    structure.setData(booking);
 		return  new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.FOUND);
 		}
-		return null;//booking object not found for the given id
+		throw new BookingNotDone("booking not done for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Booking>> deleteBooking(int bookingId)
@@ -52,7 +53,7 @@ public class BookingService
 			structure.setData(booking);
 		return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.OK);
 		}
-		return null;//booking object not found for the given id
+		throw new BookingNotDone("booking not done for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Booking>> updateBooking(Booking booking,int bookingId)
@@ -66,7 +67,7 @@ public class BookingService
 		structure.setData(bookingDao.updateBooking(booking, bookingId));
 		return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.OK);
 		}
-		return null;//booking object not found for the given id
+		throw new BookingNotDone("booking not done for the given id");
 	}
 	
 	public List<Booking> findAllBookings()
@@ -80,7 +81,7 @@ public class BookingService
 		structure.setData(bookingList);
 		return bookingDao.findAllBooking();
 		}
-		return null;//no bookings available
+		throw new BookingNotDone("booking not done for the given id");
 	}
 
 

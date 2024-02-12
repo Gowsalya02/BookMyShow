@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.MovieDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Movie;
+import com.bookmyshow.boot.bookmyshow.project.exception.MovieNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -37,7 +38,7 @@ public class MovieService
 	    structure.setData(movie);
 		return  new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.FOUND);
 		}
-		return null;//movie object not found for the given id
+		throw new MovieNotFound("movie object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Movie>> deleteMovie(int movieId)
@@ -52,7 +53,7 @@ public class MovieService
 			structure.setData(movie);
 		return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.OK);
 		}
-		return null;//movie object not found for the given id
+		throw new MovieNotFound("movie object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Movie>> updateMovie(Movie movie,int movieId)
@@ -66,7 +67,7 @@ public class MovieService
 		structure.setData(movieDao.updateMovie(movie, movieId));
 		return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.OK);
 		}
-		return null;//movie object not found for the given id
+		throw new MovieNotFound("movie object not found for the given id");
 	}
 	
 	public List<Movie> findAllMovies()

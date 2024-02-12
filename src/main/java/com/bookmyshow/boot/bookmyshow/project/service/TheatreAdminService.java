@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.TheatreAdminDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.TheatreAdmin;
+import com.bookmyshow.boot.bookmyshow.project.exception.TheatreAdminNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -37,7 +38,7 @@ public class TheatreAdminService
 	    structure.setData(theatreAdmin);
 		return  new ResponseEntity<ResponseStructure<TheatreAdmin>>(structure,HttpStatus.FOUND);
 		}
-		return null;//theatreAdmin object not found for the given id
+		throw new TheatreAdminNotFound("theatreAdmin object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<TheatreAdmin>> deleteTheatreAdmin(int theatreAdminId)
@@ -52,7 +53,7 @@ public class TheatreAdminService
 			structure.setData(theatreAdmin);
 		return new ResponseEntity<ResponseStructure<TheatreAdmin>>(structure,HttpStatus.OK);
 		}
-		return null;//theatreAdmin object not found for the given id
+		throw new TheatreAdminNotFound("theatreAdmin object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<TheatreAdmin>> updateTheatreAdmin(TheatreAdmin theatreAdmin,int theatreAdminId)
@@ -66,7 +67,7 @@ public class TheatreAdminService
 		structure.setData(theatreAdminDao.updateTheatreAdmin(theatreAdmin, theatreAdminId));
 		return new ResponseEntity<ResponseStructure<TheatreAdmin>>(structure,HttpStatus.OK);
 		}
-		return null;//theatreAdmin object not found for the given id
+		throw new TheatreAdminNotFound("theatreAdmin object not found for the given id");
 	}
 	
 	public List<TheatreAdmin> findAllTheatreAdmins()

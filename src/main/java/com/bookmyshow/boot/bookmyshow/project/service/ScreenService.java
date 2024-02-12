@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.ScreenDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Screen;
+import com.bookmyshow.boot.bookmyshow.project.exception.ScreenNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -37,7 +38,7 @@ public class ScreenService
 	    structure.setData(screen);
 		return  new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.FOUND);
 		}
-		return null;//screen object not found for the given id
+		throw new ScreenNotFound("screen object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Screen>> deleteScreen(int screenId)
@@ -52,7 +53,7 @@ public class ScreenService
 			structure.setData(screen);
 		return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.OK);
 		}
-		return null;//screen object not found for the given id
+		throw new ScreenNotFound("screen object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Screen>> updateScreen(Screen screen,int screenId)
@@ -66,7 +67,7 @@ public class ScreenService
 		structure.setData(screenDao.updateScreen(screen, screenId));
 		return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.OK);
 		}
-		return null;//screen object not found for the given id
+		throw new ScreenNotFound("screen object not found for the given id");
 	}
 	
 	public List<Screen> findAllScreens()

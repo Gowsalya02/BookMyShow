@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.UserDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.User;
+import com.bookmyshow.boot.bookmyshow.project.exception.UserNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 
@@ -38,7 +39,7 @@ public class UserService
 	    structure.setData(user);
 		return  new ResponseEntity<ResponseStructure<User>>(structure,HttpStatus.FOUND);
 		}
-		return null;//user object not found for the given id
+		throw new UserNotFound("user object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<User>> deleteUser(int userId)
@@ -53,7 +54,7 @@ public class UserService
 			structure.setData(user);
 		return new ResponseEntity<ResponseStructure<User>>(structure,HttpStatus.OK);
 		}
-		return null;//user object not found for the given id
+		throw new UserNotFound("user object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<User>> updateUser(User user,int userId)
@@ -67,7 +68,7 @@ public class UserService
 		structure.setData(userDao.updateUser(user, userId));
 		return new ResponseEntity<ResponseStructure<User>>(structure,HttpStatus.OK);
 		}
-		return null;//user object not found for the given id
+		throw new UserNotFound("user object not found for the given id");
 	}
 	
 	public List<User> findAllUsers()

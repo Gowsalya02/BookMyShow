@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.ReviewDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Review;
+import com.bookmyshow.boot.bookmyshow.project.exception.ReviewNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -37,7 +38,7 @@ public class ReviewService
 	    structure.setData(review);
 		return  new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.FOUND);
 		}
-		return null;//review object not found for the given id
+		throw new ReviewNotFound("review object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Review>> deleteReview(int reviewId)
@@ -52,7 +53,7 @@ public class ReviewService
 			structure.setData(review);
 		return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
 		}
-		return null;//review object not found for the given id
+		throw new ReviewNotFound("review object not found for the given id");
 	}
 	
 	public ResponseEntity<ResponseStructure<Review>> updateReview(Review review,int reviewId)
@@ -66,7 +67,7 @@ public class ReviewService
 		structure.setData(reviewDao.updatereview(review, reviewId));
 		return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
 		}
-		return null;//review object not found for the given id
+		throw new ReviewNotFound("review object not found for the given id");
 	}
 	
 	public List<Review> findAllReviews()
