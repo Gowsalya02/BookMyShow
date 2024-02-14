@@ -1,13 +1,16 @@
 package com.bookmyshow.boot.bookmyshow.project.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.AdminDao;
+import com.bookmyshow.boot.bookmyshow.project.dto.AdminDto;
 import com.bookmyshow.boot.bookmyshow.project.entity.Admin;
 import com.bookmyshow.boot.bookmyshow.project.exception.AdminNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
@@ -18,68 +21,92 @@ public class AdminService
 	@Autowired
 	AdminDao adminDao;
 	
-	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(Admin admin)
+	public ResponseEntity<ResponseStructure<AdminDto>> saveAdmin(Admin admin)
 	{
-		ResponseStructure<Admin> structure=new ResponseStructure<Admin>();
+		AdminDto adminDto=new AdminDto();
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.map(adminDao.saveAdmin(admin),adminDto);
+		ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();
 		structure.setMessage(" admin object saved successfully");
 		structure.setStatus(HttpStatus.CREATED.value());
-		structure.setData(adminDao.saveAdmin(admin));
-		return new ResponseEntity<ResponseStructure<Admin>>(structure, HttpStatus.CREATED);
+		structure.setData(adminDto);
+		return new ResponseEntity<ResponseStructure<AdminDto>>(structure, HttpStatus.CREATED);
 	}
 	
-	public ResponseEntity<ResponseStructure<Admin>> findAdmin(int adminId)
+	public ResponseEntity<ResponseStructure<AdminDto>> findAdmin(int adminId)
 	{
+		AdminDto adminDto=new AdminDto();
+		ModelMapper modelMapper=new ModelMapper();
+		
 		Admin admin=adminDao.findAdmin(adminId);
 		if(admin!=null)
 		{
-	    ResponseStructure<Admin> structure=new ResponseStructure<Admin>();
+			modelMapper.map(admin,adminDto);
+	    ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();
 	    structure.setMessage("Found admin");
 	    structure.setStatus(HttpStatus.FOUND.value());
-	    structure.setData(admin);
-		return  new ResponseEntity<ResponseStructure<Admin>>(structure,HttpStatus.FOUND);
+	    structure.setData(adminDto);
+		return  new ResponseEntity<ResponseStructure<AdminDto>>(structure,HttpStatus.FOUND);
 		}
 		throw new AdminNotFound("admin object not found for the given id");
 	}
 	
-	public ResponseEntity<ResponseStructure<Admin>> deleteAdmin(int adminId)
+	public ResponseEntity<ResponseStructure<AdminDto>> deleteAdmin(int adminId)
 	{
+		AdminDto adminDto=new AdminDto();
+		ModelMapper modelMapper=new ModelMapper();
 		Admin admin=adminDao.findAdmin(adminId);
 		if(admin!=null)
 		{
+			modelMapper.map(admin,adminDto);
 			adminDao.deleteAdmin(adminId);
-			ResponseStructure<Admin> structure=new ResponseStructure<Admin>();
+			ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();
 			structure.setMessage("admin deleted");
 			structure.setStatus(HttpStatus.OK.value());
-			structure.setData(admin);
-		return new ResponseEntity<ResponseStructure<Admin>>(structure,HttpStatus.OK);
+			structure.setData(adminDto);
+		return new ResponseEntity<ResponseStructure<AdminDto>>(structure,HttpStatus.OK);
 		}
 		throw new AdminNotFound("admin object not found for the given id");
 	}
 	
-	public ResponseEntity<ResponseStructure<Admin>> updateAdmin(Admin admin,int adminId)
+	public ResponseEntity<ResponseStructure<AdminDto>> updateAdmin(Admin admin,int adminId)
 	{
+		
+		AdminDto adminDto=new AdminDto();
+		ModelMapper modelMapper=new ModelMapper();
 		Admin exadmin=adminDao.findAdmin(adminId);
 		if(exadmin!=null) 
 		{
-		ResponseStructure<Admin> structure=new ResponseStructure<Admin>();
+		modelMapper.map(adminDao.updateAdmin(admin, adminId), adminDto);
+		ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();
 		structure.setMessage("admin Updated");
 		structure.setStatus(HttpStatus.OK.value());
-		structure.setData(adminDao.updateAdmin(admin, adminId));
-		return new ResponseEntity<ResponseStructure<Admin>>(structure,HttpStatus.OK);
+		structure.setData(adminDto);
+		return new ResponseEntity<ResponseStructure<AdminDto>>(structure,HttpStatus.OK);
 		}
 		throw new AdminNotFound("admin object not found for the given id");
 	}
 	
-	public List<Admin> findAllAdmins()
+	public List<AdminDto> findAllAdmins()
 	{
-		List<Admin> adminList=adminDao.findAllAdmins();
-		if(adminList!=null) 
-		{
-		ResponseStructure<List<Admin>> structure= new ResponseStructure<List<Admin>>();
+
+		 List<Admin> adminList=adminDao.findAllAdmins();
+		 List<AdminDto> adminDtoList=new ArrayList<AdminDto>();
+		 if(adminList!=null) 
+			{
+		 for (Admin admin : adminList) 
+		 {
+			 AdminDto adminDto=new AdminDto();
+			 ModelMapper modelMapperl=new ModelMapper();
+			 modelMapperl.map(admin,adminDto);
+			 adminDtoList.add(adminDto);
+		 }
+		
+		ResponseStructure<List<AdminDto>> structure= new ResponseStructure<List<AdminDto>>();
 		structure.setMessage("list of all admin");
 		structure.setStatus(HttpStatus.OK.value());
-		structure.setData(adminList);
-		return adminDao.findAllAdmins();
+		structure.setData(adminDtoList);
+		return adminDtoList;
 		}
 		return null;//no admins available
 	}

@@ -11,7 +11,8 @@ import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 @RestControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler
 {
-
+			
+	
 	@org.springframework.web.bind.annotation.ExceptionHandler
 	public ResponseEntity<ResponseStructure<String>> adminNotFound(AdminNotFound ex)
 	{

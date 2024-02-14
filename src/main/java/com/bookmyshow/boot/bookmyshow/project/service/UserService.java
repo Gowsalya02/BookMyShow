@@ -1,12 +1,16 @@
 package com.bookmyshow.boot.bookmyshow.project.service;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.UserDao;
+import com.bookmyshow.boot.bookmyshow.project.dto.UserDto;
 import com.bookmyshow.boot.bookmyshow.project.entity.User;
 import com.bookmyshow.boot.bookmyshow.project.exception.UserNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
@@ -19,68 +23,89 @@ public class UserService
 	@Autowired
 	UserDao userDao;
 	
-	public ResponseEntity<ResponseStructure<User>> saveUser(User user)
+	public ResponseEntity<ResponseStructure<UserDto>> saveUser(User user)
 	{
-		ResponseStructure<User> structure=new ResponseStructure<User>();
+		UserDto userDto=new UserDto();
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.map(userDao.saveUser(user),userDto);
+		ResponseStructure<UserDto> structure=new ResponseStructure<UserDto>();
 		structure.setMessage(" User object saved successfully");
 		structure.setStatus(HttpStatus.CREATED.value());
-		structure.setData(userDao.saveUser(user));
-		return new ResponseEntity<ResponseStructure<User>>(structure, HttpStatus.CREATED);
+		structure.setData(userDto);
+		return new ResponseEntity<ResponseStructure<UserDto>>(structure, HttpStatus.CREATED);
 	}
 	
-	public ResponseEntity<ResponseStructure<User>> findUser(int userId)
+	public ResponseEntity<ResponseStructure<UserDto>> findUser(int userId)
 	{
+		UserDto userDto=new UserDto();
+		ModelMapper modelMapper=new ModelMapper();
 		User user=userDao.findUser(userId);
 		if(user!=null)
 		{
-	    ResponseStructure<User> structure=new ResponseStructure<User>();
+	    modelMapper.map(user,userDto);
+	    ResponseStructure<UserDto> structure=new ResponseStructure<UserDto>();
 	    structure.setMessage("Found User");
 	    structure.setStatus(HttpStatus.FOUND.value());
-	    structure.setData(user);
-		return  new ResponseEntity<ResponseStructure<User>>(structure,HttpStatus.FOUND);
+	    structure.setData(userDto);
+		return  new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.FOUND);
 		}
 		throw new UserNotFound("user object not found for the given id");
 	}
 	
-	public ResponseEntity<ResponseStructure<User>> deleteUser(int userId)
+	public ResponseEntity<ResponseStructure<UserDto>> deleteUser(int userId)
 	{
+		UserDto userDto=new UserDto();
+		ModelMapper modelMapper=new ModelMapper();
 		User user=userDao.findUser(userId);
 		if(user!=null)
 		{
+			 modelMapper.map(user,userDto);
 			userDao.deleteUser(userId);
-			ResponseStructure<User> structure=new ResponseStructure<User>();
+			ResponseStructure<UserDto> structure=new ResponseStructure<UserDto>();
 			structure.setMessage("user deleted");
 			structure.setStatus(HttpStatus.OK.value());
-			structure.setData(user);
-		return new ResponseEntity<ResponseStructure<User>>(structure,HttpStatus.OK);
+			structure.setData(userDto);
+		return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.OK);
 		}
 		throw new UserNotFound("user object not found for the given id");
 	}
 	
-	public ResponseEntity<ResponseStructure<User>> updateUser(User user,int userId)
+	public ResponseEntity<ResponseStructure<UserDto>> updateUser(User user,int userId)
 	{
+		UserDto userDto=new UserDto();
+		ModelMapper modelMapper=new ModelMapper();
 		User exUser=userDao.findUser(userId);
 		if(exUser!=null) 
 		{
-		ResponseStructure<User> structure=new ResponseStructure<User>();
+	    modelMapper.map(userDao.updateUser(user, userId),userDto);
+		ResponseStructure<UserDto> structure=new ResponseStructure<UserDto>();
 		structure.setMessage("user Updated");
 		structure.setStatus(HttpStatus.OK.value());
-		structure.setData(userDao.updateUser(user, userId));
-		return new ResponseEntity<ResponseStructure<User>>(structure,HttpStatus.OK);
+		structure.setData(userDto);
+		return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.OK);
 		}
 		throw new UserNotFound("user object not found for the given id");
 	}
 	
-	public List<User> findAllUsers()
+	public List<UserDto> findAllUsers()
 	{
 		List<User> userList=userDao.findAllUsers();
-		if(userList!=null) 
-		{
-		ResponseStructure<List<User>> structure= new ResponseStructure<List<User>>();
+		 List<UserDto> userDtoList=new ArrayList<UserDto>();
+		 if(userList!=null) 
+			{
+		 for (User user : userList) 
+		 {
+			 UserDto userDto=new UserDto();
+			 ModelMapper modelMapperl=new ModelMapper();
+			 modelMapperl.map(user,userDto);
+			 userDtoList.add(userDto);
+		 }
+			
+		ResponseStructure<List<UserDto>> structure= new ResponseStructure<List<UserDto>>();
 		structure.setMessage("list of all user");
 		structure.setStatus(HttpStatus.OK.value());
-		structure.setData(userList);
-		return userDao.findAllUsers();
+		structure.setData(userDtoList);
+		return userDtoList;
 		}
 		return null;//no users available
 	}

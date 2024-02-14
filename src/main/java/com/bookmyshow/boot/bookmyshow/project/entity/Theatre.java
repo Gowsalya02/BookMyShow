@@ -18,7 +18,7 @@ import lombok.Setter;
 @Component
 @Getter
 @Setter
-public class Theatre 
+public class Theatre
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
