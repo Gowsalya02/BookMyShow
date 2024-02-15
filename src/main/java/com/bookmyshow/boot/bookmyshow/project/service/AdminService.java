@@ -87,7 +87,7 @@ public class AdminService
 		throw new AdminNotFound("admin object not found for the given id");
 	}
 	
-	public List<AdminDto> findAllAdmins()
+	public ResponseEntity<ResponseStructure<List<AdminDto>>> findAllAdmins()
 	{
 
 		 List<Admin> adminList=adminDao.findAllAdmins();
@@ -104,12 +104,36 @@ public class AdminService
 		
 		ResponseStructure<List<AdminDto>> structure= new ResponseStructure<List<AdminDto>>();
 		structure.setMessage("list of all admin");
-		structure.setStatus(HttpStatus.OK.value());
+		structure.setStatus(HttpStatus.FOUND.value());
 		structure.setData(adminDtoList);
-		return adminDtoList;
+		return new ResponseEntity<ResponseStructure<List<AdminDto>>>(structure,HttpStatus.FOUND);
 		}
 		return null;//no admins available
 	}
 
 
+	public ResponseEntity<ResponseStructure<AdminDto>> adminLogin(String adminMail,String adminPassword)
+	{
+		
+		AdminDto adminDto=new AdminDto();
+		ModelMapper modelMapper=new ModelMapper();
+		Admin admin=adminDao.findByMail(adminMail);
+		
+		ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();
+		if(admin!=null)
+		{
+			if(admin.getAdminPassword().equals(adminPassword))
+			{
+				modelMapper.map(admin, adminDto);
+			 structure.setData(adminDto);
+			 structure.setMessage("Admin login succesfully");
+			 structure.setStatus(HttpStatus.ACCEPTED.value());
+			 
+			 return new ResponseEntity<ResponseStructure<AdminDto>>(structure,HttpStatus.ACCEPTED);
+			} 
+			throw new AdminNotFound("admin password is not matching");
+			
+		}
+		throw new AdminNotFound("admin object not found for the given mail id");
+	}
 }

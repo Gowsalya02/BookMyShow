@@ -110,4 +110,29 @@ public class UserService
 		return null;//no users available
 	}
 
+	public ResponseEntity<ResponseStructure<UserDto>> userLogin(String userMail,String userPassword)
+	{
+		
+		UserDto userDto=new UserDto();
+		ModelMapper modelMapper=new ModelMapper();
+		User user=userDao.findByMail(userMail);
+		
+		ResponseStructure<UserDto> structure=new ResponseStructure<UserDto>();
+		if(user!=null)
+		{
+			if(user.getUserPassword().equals(userPassword))
+			{
+				modelMapper.map(user, userDto);
+			 structure.setData(userDto);
+			 structure.setMessage("user login succesfully");
+			 structure.setStatus(HttpStatus.ACCEPTED.value());
+			 
+			 return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.ACCEPTED);
+			} 
+			throw new UserNotFound("user password is not matching");
+			
+		}
+		throw new UserNotFound("user object not found for the given mail id");
+	}
+	
 }

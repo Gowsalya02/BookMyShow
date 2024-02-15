@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.bookmyshow.boot.bookmyshow.project.dto.UserDto;
 import com.bookmyshow.boot.bookmyshow.project.entity.User;
 import com.bookmyshow.boot.bookmyshow.project.service.UserService;
@@ -52,5 +51,11 @@ public class UserController
 	{
 		return userService.findAllUsers();
 	}
+	@GetMapping("userlogin")
+	public ResponseEntity<ResponseStructure<UserDto>> userLogin(String userMail,String userPassword)
+	{
+		return userService.userLogin(userMail, userPassword);
+	}
+
 
 }

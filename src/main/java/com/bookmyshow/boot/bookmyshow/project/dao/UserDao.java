@@ -60,4 +60,8 @@ public class UserDao
 		return userRepository.findAll();
 	}
 
+	public User findByMail(String userMail)
+	{
+		return userRepository.findByMail(userMail);
+	}
 }

@@ -42,6 +42,7 @@ public class AdminDao
 	
 		return null;//admin object is found for the given ID
 	}
+	
 
 	public Admin updateAdmin(Admin admin,int adminId)
 	{
@@ -58,6 +59,11 @@ public class AdminDao
 	public List<Admin> findAllAdmins()
 	{
 		return adminRepository.findAll();
+	}
+	
+	public Admin findByMail(String adminMail)
+	{
+		return adminRepository.findByMail(adminMail);
 	}
 	
 }

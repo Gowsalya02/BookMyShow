@@ -50,9 +50,15 @@ public class AdminController
 	}
 	
 	@GetMapping("all")
-	public List<AdminDto> findAllAdmins()
+	public ResponseEntity<ResponseStructure<List<AdminDto>>> findAllAdmins()
 	{
 		return adminService.findAllAdmins();
+	}
+	
+	@GetMapping("adminlogin")
+	public ResponseEntity<ResponseStructure<AdminDto>> adminLogin(String adminMail,String adminPassword)
+	{
+		return adminService.adminLogin(adminMail, adminPassword);
 	}
 
 	
