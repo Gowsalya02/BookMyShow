@@ -28,7 +28,7 @@ public class TheatreAdminDao
 		{
 			return optional.get();
 		}
-		return null;//TheatreAdmin object not present
+		return null;
 	}
 	
 	public TheatreAdmin deleteTheatreAdmin(int theatreAdminId)
@@ -40,7 +40,7 @@ public class TheatreAdminDao
 		return exTheatreAdmin;
 		}
 	
-		return null;//TheatreAdmin object is found for the given ID
+		return null;
 	}
 
 	public TheatreAdmin updateTheatreAdmin(TheatreAdmin theatreAdmin,int theatreAdminId)
@@ -52,12 +52,22 @@ public class TheatreAdminDao
 			theatreAdmin.setTheatreAdminId(theatreAdminId);
 			return theatreAdminRepository.save(theatreAdmin);
 		}
-		return null;//theatreAdmin object is not found for the given ID
+		return null;
 	}
 	
 	public List<TheatreAdmin> findAllTheatreAdmins()
 	{
 		return theatreAdminRepository.findAll();
 	}
+	
+//	public TheatreAdmin findByMail(String theatreAdminMail)
+//	{
+//		TheatreAdmin theatreAdmin=theatreAdminRepository.findByAdminMail(theatreAdminMail);
+//		if(theatreAdmin!=null)
+//		{
+//		return theatreAdmin;
+//		}
+//		return null;
+//	}
 
 }

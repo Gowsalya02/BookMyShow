@@ -17,6 +17,8 @@ import com.bookmyshow.boot.bookmyshow.project.entity.Screen;
 import com.bookmyshow.boot.bookmyshow.project.service.ScreenService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("screen")
 public class ScreenController 
@@ -25,25 +27,25 @@ public class ScreenController
 	ScreenService screenService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Screen>> saveScreen(@RequestBody Screen screen) 
+	public ResponseEntity<ResponseStructure<Screen>> saveScreen(@Valid @RequestBody Screen screen) 
 	{
 		return screenService.saveScreen(screen);	
 	}
 
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Screen>> findScreen(@RequestParam int screenId) 
+	public ResponseEntity<ResponseStructure<Screen>> findScreen(@Valid @RequestParam int screenId) 
 	{
 		return screenService.findScreen(screenId);	
 	}
 
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<Screen>> deleteScreen(@RequestParam int screenId) 
+	public ResponseEntity<ResponseStructure<Screen>> deleteScreen(@Valid @RequestParam int screenId) 
 	{
 		return screenService.deleteScreen(screenId);	
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Screen>> updateScreen(@RequestBody Screen screen,@RequestParam int screenId) 
+	public ResponseEntity<ResponseStructure<Screen>> updateScreen(@Valid @RequestBody Screen screen,@Valid @RequestParam int screenId) 
 	{
 		return screenService.updateScreen(screen,screenId);	
 	}

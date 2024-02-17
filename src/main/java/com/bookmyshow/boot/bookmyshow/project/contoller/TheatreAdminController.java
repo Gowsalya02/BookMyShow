@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bookmyshow.boot.bookmyshow.project.dto.TheatreAdminDto;
 import com.bookmyshow.boot.bookmyshow.project.entity.TheatreAdmin;
 import com.bookmyshow.boot.bookmyshow.project.service.TheatreAdminService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("theatreadmin")
@@ -25,33 +28,39 @@ public class TheatreAdminController
 	TheatreAdminService theatreAdminService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> saveTheatreAdmin(@RequestBody TheatreAdmin theatreAdmin) 
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> saveTheatreAdmin(@Valid @RequestBody TheatreAdmin theatreAdmin) 
 	{
 		return theatreAdminService.saveTheatreAdmin(theatreAdmin);	
 	}
 
 	@GetMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> findTheatreAdmin(@RequestParam int theatreAdminId) 
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> findTheatreAdmin(@Valid @RequestParam int theatreAdminId) 
 	{
 		return theatreAdminService.findTheatreAdmin(theatreAdminId);	
 	}
 
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> deleteTheatreAdmin(@RequestParam int theatreAdminId) 
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> deleteTheatreAdmin(@Valid @RequestParam int theatreAdminId) 
 	{
 		return theatreAdminService.deleteTheatreAdmin(theatreAdminId);	
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> updateTheatreAdmin(@RequestBody TheatreAdmin theatreAdmin,@RequestParam int theatreAdminId) 
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> updateTheatreAdmin(@Valid @RequestBody TheatreAdmin theatreAdmin,@Valid @RequestParam int theatreAdminId) 
 	{
 		return theatreAdminService.updateTheatreAdmin(theatreAdmin,theatreAdminId);	
 	}
 	
 	@GetMapping("all")
-	public List<TheatreAdmin> findAllTheatreAdmin()
+	public List<TheatreAdminDto> findAllTheatreAdmin()
 	{
 		return theatreAdminService.findAllTheatreAdmins();
 	}
 
+//	@GetMapping("tadminlogin")
+//	public ResponseEntity<ResponseStructure<TheatreAdminDto>> theatreAdminLogin(String theatreAdminMail,String theatreAdminPassword)
+//	{
+//		return theatreAdminService.theatreAdminLogin(theatreAdminMail, theatreAdminPassword);
+//		
+//	}
 }

@@ -17,6 +17,8 @@ import com.bookmyshow.boot.bookmyshow.project.entity.Booking;
 import com.bookmyshow.boot.bookmyshow.project.service.BookingService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
+import jakarta.validation.Valid;
+
 @RequestMapping("booking")
 @RestController
 public class BookingController 
@@ -25,25 +27,25 @@ public class BookingController
 	BookingService bookingService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Booking>> saveBooking(@RequestBody Booking booking) 
+	public ResponseEntity<ResponseStructure<Booking>> saveBooking(@Valid @RequestBody Booking booking) 
 	{
 		return bookingService.saveBooking(booking);	
 	}
 
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Booking>> findBooking(@RequestParam int bookingId) 
+	public ResponseEntity<ResponseStructure<Booking>> findBooking(@Valid @RequestParam int bookingId) 
 	{
 		return bookingService.findBooking(bookingId);	
 	}
 
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<Booking>> deleteBooking(@RequestParam int bookingId) 
+	public ResponseEntity<ResponseStructure<Booking>> deleteBooking(@Valid @RequestParam int bookingId) 
 	{
 		return bookingService.deleteBooking(bookingId);	
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Booking>> updateBooking(@RequestBody Booking booking,@RequestParam int bookingId) 
+	public ResponseEntity<ResponseStructure<Booking>> updateBooking(@Valid @RequestBody Booking booking,@Valid @RequestParam int bookingId) 
 	{
 		return bookingService.updateBooking(booking,bookingId);	
 	}

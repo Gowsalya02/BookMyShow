@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.AdminDao;
+import com.bookmyshow.boot.bookmyshow.project.dao.TheatreDao;
 import com.bookmyshow.boot.bookmyshow.project.dto.AdminDto;
 import com.bookmyshow.boot.bookmyshow.project.entity.Admin;
+import com.bookmyshow.boot.bookmyshow.project.entity.Theatre;
 import com.bookmyshow.boot.bookmyshow.project.exception.AdminNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
@@ -21,6 +23,9 @@ public class AdminService
 	@Autowired
 	AdminDao adminDao;
 	
+	
+	@Autowired
+	TheatreDao theatreDao;
 	public ResponseEntity<ResponseStructure<AdminDto>> saveAdmin(Admin admin)
 	{
 		AdminDto adminDto=new AdminDto();
@@ -135,5 +140,48 @@ public class AdminService
 			
 		}
 		throw new AdminNotFound("admin object not found for the given mail id");
+	}
+	public ResponseEntity<ResponseStructure<AdminDto>> addTheatreToAdmin(String adminMail,String adminPassword,int theatreId)
+	{
+		AdminDto adminDto=new AdminDto();
+		ModelMapper mapper=new ModelMapper();
+		ResponseEntity<ResponseStructure<AdminDto>> exAdminDto=adminLogin(adminMail,adminPassword);
+		
+		Admin admin=adminDao.findByMail(adminMail);
+		
+		if(exAdminDto!=null)
+		{
+			    List<Theatre> theatreList=theatreDao.findAllTheatres();
+			    List<Theatre>adminTheatre=admin.getTheatreList();
+			    if(adminTheatre.isEmpty())
+			    {
+			    	List<Theatre> newTheatreList=new ArrayList<Theatre>();
+			    	newTheatreList.add(theatreDao.findTheatre(theatreId));
+			    	admin.setTheatreList(newTheatreList);	
+			    }
+			    else 
+			    {
+			    	for (Theatre theatre : theatreList) 
+			    	{
+			    		if(theatre.getTheatreId()==theatreId)
+			    		{
+			    			adminTheatre.add(theatreDao.findTheatre(theatreId));
+			    			admin.setTheatreList(theatreList);
+			    		}
+						
+					}
+			    }
+			    
+			    mapper.map(adminDao.updateAdmin(admin,admin.getAdminId()), adminDto);
+			    ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();
+			    structure.setMessage("Theatre list assign to admin");
+			    structure.setStatus(HttpStatus.OK.value());
+			    structure.setData(adminDto);
+			    
+          return new ResponseEntity<ResponseStructure<AdminDto>>(structure,HttpStatus.OK);
+		}
+		
+		throw new AdminNotFound("Admin object is not found for the given ");
+		
 	}
 }

@@ -17,6 +17,8 @@ import com.bookmyshow.boot.bookmyshow.project.entity.Theatre;
 import com.bookmyshow.boot.bookmyshow.project.service.TheatreService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("theatre")
 public class TheatreController 
@@ -25,25 +27,25 @@ public class TheatreController
 	TheatreService theatreService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Theatre>> saveTheatre(@RequestBody Theatre theatre) 
+	public ResponseEntity<ResponseStructure<Theatre>> saveTheatre(@Valid @RequestBody Theatre theatre) 
 	{
 		return theatreService.saveTheatre(theatre);	
 	}
 
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Theatre>> findTheatre(@RequestParam int theatreId) 
+	public ResponseEntity<ResponseStructure<Theatre>> findTheatre(@Valid @RequestParam int theatreId) 
 	{
 		return theatreService.findTheatre(theatreId);	
 	}
 
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<Theatre>> deleteTheatre(@RequestParam int theatreId) 
+	public ResponseEntity<ResponseStructure<Theatre>> deleteTheatre( @Valid@RequestParam int theatreId) 
 	{
 		return theatreService.deleteTheatre(theatreId);	
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Theatre>> updateTheatre(@RequestBody Theatre theatre,@RequestParam int theatreId) 
+	public ResponseEntity<ResponseStructure<Theatre>> updateTheatre(@Valid @RequestBody Theatre theatre,@Valid @RequestParam int theatreId) 
 	{
 		return theatreService.updateTheatre(theatre,theatreId);	
 	}

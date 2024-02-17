@@ -17,6 +17,8 @@ import com.bookmyshow.boot.bookmyshow.project.entity.Movie;
 import com.bookmyshow.boot.bookmyshow.project.service.MovieService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
+import jakarta.validation.Valid;
+
 @RequestMapping("movie")
 @RestController
 public class MovieController 
@@ -25,25 +27,25 @@ public class MovieController
 	MovieService movieService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Movie>> saveMovie(@RequestBody Movie movie) 
+	public ResponseEntity<ResponseStructure<Movie>> saveMovie(@Valid @RequestBody Movie movie) 
 	{
 		return movieService.saveMovie(movie);	
 	}
 
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Movie>> findMovie(@RequestParam int movieId) 
+	public ResponseEntity<ResponseStructure<Movie>> findMovie(@Valid @RequestParam int movieId) 
 	{
 		return movieService.findMovie(movieId);	
 	}
 
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<Movie>> deleteMovie(@RequestParam int movieId) 
+	public ResponseEntity<ResponseStructure<Movie>> deleteMovie(@Valid @RequestParam int movieId) 
 	{
 		return movieService.deleteMovie(movieId);	
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Movie>> updateMovie(@RequestBody  Movie movie,@RequestParam int movieId) 
+	public ResponseEntity<ResponseStructure<Movie>> updateMovie(@Valid @RequestBody  Movie movie,@Valid @RequestParam int movieId) 
 	{
 		return movieService.updateMovie(movie,movieId);	
 	}

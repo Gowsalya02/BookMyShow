@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +25,8 @@ public class Movie
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int movieId;
+	@NotBlank
+	@NotNull
 	private String movieName;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Review> reviewList;

@@ -17,6 +17,8 @@ import com.bookmyshow.boot.bookmyshow.project.entity.Review;
 import com.bookmyshow.boot.bookmyshow.project.service.ReviewService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
+import jakarta.validation.Valid;
+
 @RequestMapping("review")
 @RestController
 public class ReviewController 
@@ -25,25 +27,25 @@ public class ReviewController
 	ReviewService reviewService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Review>> saveReview(@RequestBody  Review review) 
+	public ResponseEntity<ResponseStructure<Review>> saveReview(@Valid @RequestBody  Review review) 
 	{
 		return reviewService.saveReview(review);	
 	}
 
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Review>> findReview(@RequestParam int reviewId) 
+	public ResponseEntity<ResponseStructure<Review>> findReview(@Valid @RequestParam int reviewId) 
 	{
 		return reviewService.findReview(reviewId);	
 	}
 
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<Review>> deleteReview(@RequestParam int reviewId) 
+	public ResponseEntity<ResponseStructure<Review>> deleteReview(@Valid @RequestParam int reviewId) 
 	{
 		return reviewService.deleteReview(reviewId);	
 	}
 
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Review>> updateReview(@RequestBody Review review,@RequestParam int reviewId) 
+	public ResponseEntity<ResponseStructure<Review>> updateReview(@Valid @RequestBody Review review,@Valid @RequestParam int reviewId) 
 	{
 		return reviewService.updateReview(review,reviewId);	
 	}

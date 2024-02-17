@@ -1,5 +1,7 @@
 package com.bookmyshow.boot.bookmyshow.project.exception;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -7,6 +9,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler
@@ -87,5 +92,42 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler
 		structure.setStatus(HttpStatus.NOT_FOUND.value());
 		structure.setData(ex.getMessage());
 		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.NOT_FOUND);
+	}
+	@org.springframework.web.bind.annotation.ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> seatNotFound(SeatNotFound ex)
+	{
+		ResponseStructure<String> structure=new ResponseStructure<String>();
+		structure.setMessage("seat object not found for given id");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		structure.setData(ex.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.NOT_FOUND);
+	}
+	@org.springframework.web.bind.annotation.ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> ticketNotFound(TicketNotFound ex)
+	{
+		ResponseStructure<String> structure=new ResponseStructure<String>();
+		structure.setMessage("Ticket not found for given id");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		structure.setData(ex.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.NOT_FOUND);
+	}
+	@org.springframework.web.bind.annotation.ExceptionHandler
+	public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex)
+	{
+		ResponseStructure<Object> structure=new ResponseStructure<Object>();
+		Map<String, String>hashMap=new HashMap<String, String>();
+		
+		for (ConstraintViolation<?> violation : ex.getConstraintViolations()) 
+		{
+			String field=violation.getPropertyPath().toString();
+			String message=violation.getMessage();
+			hashMap.put(field, message);
+		}
+		
+		structure.setMessage("add proper details");
+		structure.setStatus(HttpStatus.FORBIDDEN.value());
+		structure.setData(hashMap);
+		return new ResponseEntity<Object>(structure,HttpStatus.FORBIDDEN);
+		
 	}
 }
