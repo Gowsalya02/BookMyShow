@@ -9,6 +9,6 @@ import com.bookmyshow.boot.bookmyshow.project.entity.TheatreAdmin;
 public interface TheatreAdminRepository extends JpaRepository<TheatreAdmin, Integer>
 {
 
-//	@Query("select t  from TheaterAdmin t where t.theatreAdminMail=?1")
-//	public TheatreAdmin findByAdminMail(String theatreAdminMail);
+	@Query("select t  from TheatreAdmin t where t.theatreAdminMail=?1")
+	public TheatreAdmin findByAdminMail(String theatreAdminMail);
 }

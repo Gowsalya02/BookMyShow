@@ -60,14 +60,14 @@ public class TheatreAdminDao
 		return theatreAdminRepository.findAll();
 	}
 	
-//	public TheatreAdmin findByMail(String theatreAdminMail)
-//	{
-//		TheatreAdmin theatreAdmin=theatreAdminRepository.findByAdminMail(theatreAdminMail);
-//		if(theatreAdmin!=null)
-//		{
-//		return theatreAdmin;
-//		}
-//		return null;
-//	}
+	public TheatreAdmin findByMail(String theatreAdminMail)
+	{
+		TheatreAdmin theatreAdmin=theatreAdminRepository.findByAdminMail(theatreAdminMail);
+		if(theatreAdmin!=null)
+		{
+		return theatreAdmin;
+		}
+		return null;
+	}
 
 }

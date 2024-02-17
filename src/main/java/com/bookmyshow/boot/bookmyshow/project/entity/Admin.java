@@ -33,7 +33,7 @@ public class Admin
 	private String adminMail;
 	@NotBlank
 	@NotNull
-	@Pattern(regexp = "^(?=.[a-z])(?=.[A)(?=.*\\d)(?=.*[@$!%#?&]){8,}$ ")
+//	@Pattern(regexp = "^(?=.[a-z])(?=.[A)(?=.*\\d)(?=.*[@$!%#?&]){8,}$ ")
 	private String adminPassword;
 
 	@OneToMany(cascade = CascadeType.ALL)

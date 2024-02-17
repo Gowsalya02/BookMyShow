@@ -19,6 +19,7 @@ import com.bookmyshow.boot.bookmyshow.project.service.TheatreAdminService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 import jakarta.validation.Valid;
+import lombok.val;
 
 @RestController
 @RequestMapping("theatreadmin")
@@ -57,10 +58,18 @@ public class TheatreAdminController
 		return theatreAdminService.findAllTheatreAdmins();
 	}
 
-//	@GetMapping("tadminlogin")
-//	public ResponseEntity<ResponseStructure<TheatreAdminDto>> theatreAdminLogin(String theatreAdminMail,String theatreAdminPassword)
-//	{
-//		return theatreAdminService.theatreAdminLogin(theatreAdminMail, theatreAdminPassword);
-//		
-//	}
+	@GetMapping("tadminlogin")
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> theatreAdminLogin(@Valid @RequestParam String theatreAdminMail,@Valid @RequestParam String theatreAdminPassword)
+	{
+		return theatreAdminService.theatreAdminLogin(theatreAdminMail, theatreAdminPassword);
+		
+	}
+	
+	@PutMapping("assigntheatre")
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> addTheatreByAdmin(@Valid @RequestParam String theatreAdminMail,@Valid @RequestParam String theatreAdminPassword,int theatreId)
+	{
+		return theatreAdminService.addTheatreByAdmin(theatreAdminMail, theatreAdminPassword, theatreId);
+	}
+	
+	
 }

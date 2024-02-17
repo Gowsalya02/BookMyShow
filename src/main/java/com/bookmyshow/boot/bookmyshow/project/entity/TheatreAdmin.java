@@ -16,7 +16,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Entity
 @Component
 @Getter
@@ -33,7 +35,7 @@ public class TheatreAdmin
 	@NotNull
 	@Email
 	private String theatreAdminMail;
-	@Pattern(regexp = "^(?=.[a-z])(?=.[A)(?=.*\\d)(?=.*[@$!%#?&^]){8,}$ ", message="Invalid password")
+//	@Pattern(regexp = "^(?=.[a-z])(?=.[A)(?=.*\\d)(?=.*[@$!%#?&^]){8,}$ ", message="Invalid password")
 	private String theatreAdminPassword;
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
