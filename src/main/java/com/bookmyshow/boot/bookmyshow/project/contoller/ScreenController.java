@@ -56,4 +56,15 @@ public class ScreenController
 		return screenService.findAllScreens();
 	}
 
+	@PutMapping("assigntheatre")
+	public ResponseEntity<ResponseStructure<Screen>> addTheatreToScreen(@Valid @RequestParam int screenId,@Valid @RequestParam int theatreId )
+	{
+		return screenService.addTheatreToScreen(screenId, theatreId);
+	}
+	
+	@PutMapping("assignstatus")
+	public ResponseEntity<ResponseStructure<Screen>> addStatusToScreen(int screenId,int status)
+	{
+		return screenService.addStatusToScreen(screenId, status);
+	}
 }
