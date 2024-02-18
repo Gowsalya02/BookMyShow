@@ -56,4 +56,15 @@ public class ReviewController
 		return reviewService.findAllReviews();
 	}
 
+	@PutMapping("assignmovie")
+	public ResponseEntity<ResponseStructure<Review>> setMovieToReview(int reviewId,int movieId)
+	{
+		return reviewService.setMovieToReview(reviewId, movieId);
+	}
+	
+	@PutMapping("removemovie")
+	public ResponseEntity<ResponseStructure<Review>> removeMovieFromReview(int reviewId,int movieId)
+	{
+		return reviewService.removeMovieFromReview(reviewId, movieId);
+	}
 }

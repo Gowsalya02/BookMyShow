@@ -61,4 +61,10 @@ public class TheatreController
 	{
 		return theatreService.setAdminToTheatre(theatreId, theatreAdminMail, theatreAdminPassword);
 	}
+	
+	@PutMapping("setscreen")
+	public ResponseEntity<ResponseStructure<Theatre>> setScreenToTheatre(int theatreId,int screenId)
+	{
+		return theatreService.setScreenToTheatre(theatreId, screenId);
+	}
 }

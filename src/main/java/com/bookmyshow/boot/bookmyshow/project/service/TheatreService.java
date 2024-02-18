@@ -1,5 +1,6 @@
 package com.bookmyshow.boot.bookmyshow.project.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.bookmyshow.boot.bookmyshow.project.dao.ScreenDao;
 import com.bookmyshow.boot.bookmyshow.project.dao.TheatreAdminDao;
 import com.bookmyshow.boot.bookmyshow.project.dao.TheatreDao;
+import com.bookmyshow.boot.bookmyshow.project.entity.Screen;
 import com.bookmyshow.boot.bookmyshow.project.entity.Theatre;
 import com.bookmyshow.boot.bookmyshow.project.entity.TheatreAdmin;
 import com.bookmyshow.boot.bookmyshow.project.exception.TheatreAdminNotFound;
@@ -20,7 +23,8 @@ public class TheatreService
 {
 	@Autowired
 	TheatreDao theatreDao;
-	
+	@Autowired
+	ScreenDao screenDao;
 	@Autowired
 	TheatreAdminDao theatreAdminDao;
 	@Autowired
@@ -144,4 +148,41 @@ public class TheatreService
 		
 	}
 
+	public ResponseEntity<ResponseStructure<Theatre>> setScreenToTheatre(int theatreId,int screenId)
+	{
+	     Theatre exTheatre= theatreDao.findTheatre(theatreId);
+	     if(exTheatre!=null)
+	     {
+	    	 
+	    	 List<Screen>theatreScreen=exTheatre.getScreenList();
+	    	 if(theatreScreen.isEmpty())
+	    	 {
+	    		 List<Screen> newScreenList=new ArrayList<Screen>();
+	    		 newScreenList.add(screenDao.findScreen(screenId));
+	    		 exTheatre.setScreenList(newScreenList);
+	    	 }
+	    	 else 
+	    	 {
+	    		 List<Screen>screenList=screenDao.findAllScreens();
+	    		 for (Screen screen : screenList) 
+	    		 {
+	    			 if(screen.getScreenId()==theatreId)
+	    			 {
+	    				 theatreScreen.add(screenDao.findScreen(screenId));
+	    				 exTheatre.setScreenList(theatreScreen);
+	    			 }
+					
+				}
+	    		 
+	    	 }
+	    	 
+	    	 ResponseStructure<Theatre> structure=new ResponseStructure<Theatre>();
+	    	 structure.setMessage("Screen assigned to the theatre");
+	    	 structure.setStatus(HttpStatus.OK.value());
+	    	 structure.setData(theatreDao.updateTheatre(exTheatre, theatreId));
+	    	 return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
+	     }
+	     throw new TheatreNotFound("theatre object not found for the given id");
+		
+	}
 }

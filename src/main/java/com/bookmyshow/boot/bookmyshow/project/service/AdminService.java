@@ -166,12 +166,11 @@ public class AdminService
 			    		if(theatre.getTheatreId()==theatreId)
 			    		{
 			    			adminTheatre.add(theatreDao.findTheatre(theatreId));
-			    			admin.setTheatreList(theatreList);
+			    			admin.setTheatreList(adminTheatre);
 			    		}
 						
 					}
 			    }
-			    
 			    mapper.map(adminDao.updateAdmin(admin,admin.getAdminId()), adminDto);
 			    ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();
 			    structure.setMessage("Theatre list assign to admin");
@@ -180,7 +179,6 @@ public class AdminService
 			    
           return new ResponseEntity<ResponseStructure<AdminDto>>(structure,HttpStatus.OK);
 		}
-		
 		throw new AdminNotFound("Admin object is not found for the given ");
 		
 	}
