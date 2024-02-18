@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.SeatDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Seat;
+import com.bookmyshow.boot.bookmyshow.project.entity.SeatType;
+import com.bookmyshow.boot.bookmyshow.project.exception.InvalidType;
 import com.bookmyshow.boot.bookmyshow.project.exception.SeatNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
@@ -82,5 +84,28 @@ public class SeatService
 		}
 		return null;//no seats available
 	}
+	public ResponseEntity<ResponseStructure<Seat>> setSeatType(int seatId,int seatType)
+	{
+		Seat seat= seatDao.findSeat(seatId);
+		if(seat!=null)
+		{
+		switch (seatType) 
+		{
+		case  1:seat.setSeatType(SeatType.firstclass);break;
+		case  2:seat.setSeatType(SeatType.secondclass);;break;
+		case  3:seat.setSeatType(SeatType.thirdclass);break;
+		default:throw new InvalidType("invalid  status type");
+		}
+		
+		ResponseStructure<Seat> structure=new ResponseStructure<Seat>();
+		structure.setMessage("seat Updated");
+		structure.setStatus(HttpStatus.OK.value());
+		structure.setData(seatDao.updateSeat(seat, seatId));
+		return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.OK);
+		
+		}
+		throw new SeatNotFound("seat is not found for the given id");
+	}
+	
 
 }

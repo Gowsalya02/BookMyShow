@@ -63,6 +63,7 @@ public class AdminService
 		Admin admin=adminDao.findAdmin(adminId);
 		if(admin!=null)
 		{
+			admin.setTheatreList(null);
 			modelMapper.map(admin,adminDto);
 			adminDao.deleteAdmin(adminId);
 			ResponseStructure<AdminDto> structure=new ResponseStructure<AdminDto>();

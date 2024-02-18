@@ -12,7 +12,7 @@ import com.bookmyshow.boot.bookmyshow.project.dao.TheatreDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Screen;
 import com.bookmyshow.boot.bookmyshow.project.entity.Status;
 import com.bookmyshow.boot.bookmyshow.project.entity.Theatre;
-import com.bookmyshow.boot.bookmyshow.project.exception.InvalidStatusType;
+import com.bookmyshow.boot.bookmyshow.project.exception.InvalidType;
 import com.bookmyshow.boot.bookmyshow.project.exception.ScreenNotFound;
 import com.bookmyshow.boot.bookmyshow.project.exception.TheatreNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
@@ -125,7 +125,7 @@ public class ScreenService
 		case  1:screen.setStatusOfShow(Status.cancelled);break;
 		case  2:screen.setStatusOfShow(Status.pending);;break;
 		case  3:screen.setStatusOfShow(Status.watched);break;
-		default:throw new InvalidStatusType("invalid  status type");
+		default:throw new InvalidType("invalid  status type");
 		}
 		
 		ResponseStructure<Screen> structure=new ResponseStructure<Screen>();

@@ -54,5 +54,11 @@ public class TicketController
 	{
 		return ticketService.findAllTickets();
 	}
+	
+	@PutMapping("assignseat")
+	public ResponseEntity<ResponseStructure<Ticket>> setSeatToTicket(int ticketId,int seatId)
+	{
+		return ticketService.setSeatToTicket(ticketId, seatId);
+	}
 
 }

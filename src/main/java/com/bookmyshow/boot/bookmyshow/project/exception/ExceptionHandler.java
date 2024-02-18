@@ -131,10 +131,10 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler
 		
 	}
 	@org.springframework.web.bind.annotation.ExceptionHandler
-	public ResponseEntity<ResponseStructure<String>> invalidStatusType(InvalidStatusType ex)
+	public ResponseEntity<ResponseStructure<String>> invalidStatusType(InvalidType ex)
 	{
 		ResponseStructure<String> structure=new ResponseStructure<String>();
-		structure.setMessage("status type is invalid");
+		structure.setMessage("invalid input type");
 		structure.setStatus(HttpStatus.NOT_FOUND.value());
 		structure.setData(ex.getMessage());
 		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.NOT_FOUND);
