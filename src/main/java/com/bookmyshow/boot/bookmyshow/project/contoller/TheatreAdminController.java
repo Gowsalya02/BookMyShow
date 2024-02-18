@@ -19,7 +19,7 @@ import com.bookmyshow.boot.bookmyshow.project.service.TheatreAdminService;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 import jakarta.validation.Valid;
-import lombok.val;
+
 
 @RestController
 @RequestMapping("theatreadmin")
