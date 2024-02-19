@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.bookmyshow.boot.bookmyshow.project.dao.BookingDao;
 import com.bookmyshow.boot.bookmyshow.project.dao.SeatDao;
 import com.bookmyshow.boot.bookmyshow.project.dao.TicketDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Ticket;
+import com.bookmyshow.boot.bookmyshow.project.entity.Booking;
 import com.bookmyshow.boot.bookmyshow.project.entity.Seat;
+import com.bookmyshow.boot.bookmyshow.project.exception.BookingNotDone;
 import com.bookmyshow.boot.bookmyshow.project.exception.TicketNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
@@ -22,6 +25,9 @@ public class TicketService
 	
 	@Autowired
 	SeatDao seatDao;
+	
+	@Autowired
+	BookingDao bookingDao;
 	
 	public ResponseEntity<ResponseStructure<Ticket>> saveTicket(Ticket ticket)
 	{
@@ -134,6 +140,8 @@ public class TicketService
 		{
 			List<Seat>ticketSeat=ticket.getSeatList();
 			
+			if(ticketSeat!=null)
+			{
 			for (Seat seat : ticketSeat) 
 			{
 				if(seat.getSeatId()==seatId)
@@ -143,6 +151,13 @@ public class TicketService
 			}
 			
 			ticket.setSeatList(ticketSeat);
+			}
+			else
+			{
+				List<Seat>newSeatList=new ArrayList<Seat>();
+				newSeatList.add(seatDao.findSeat(seatId));
+				ticket.setSeatList(newSeatList);
+			}
 			ResponseStructure<Ticket> structure=new ResponseStructure<Ticket>();
 			structure.setMessage("seat removed");
 			structure.setStatus(HttpStatus.OK.value());
@@ -152,4 +167,29 @@ public class TicketService
 		throw new TicketNotFound("ticket object not found for the given id");
 	}
 
+	public ResponseEntity<ResponseStructure<Ticket>> setBookingToTicket(int ticketId,int bookingId)
+	{
+		Ticket ticket=ticketDao.findTicket(ticketId);
+		if(ticket!=null)
+		{
+			Booking booking= bookingDao.findBooking(bookingId);
+			if(booking!=null)
+			{
+				if(ticket.getBooking().equals(null))
+				{
+					ticket.setBooking(booking);
+					ResponseStructure<Ticket>structure=new ResponseStructure<Ticket>();
+					structure.setMessage("booking is done for the ticket");
+					structure.setStatus(HttpStatus.OK.value());
+					structure.setData(ticketDao.updateTicket(ticket, ticketId));
+					return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.OK);
+					
+				}
+				throw new TicketNotFound("this ticket already booked");
+			}
+			throw new BookingNotDone("booking is not found for the given Id");
+		}
+		throw new TicketNotFound("ticket object not found for the given id");
+	}
+	
 }

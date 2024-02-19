@@ -37,7 +37,7 @@ public class User
 	private String userMail;
 	@NotNull
 	@NotBlank
-	@Pattern(regexp = "^(?=.[a-z])(?=.[A)(?=.*\\d)(?=.*[@$!%#?&^]){8,}$ ", message="Invalid password")
+//	@Pattern(regexp = "^(?=.[a-z])(?=.[A)(?=.*\\d)(?=.*[@$!%#?&^]){8,}$ ", message="Invalid password")
 	private String userPassword;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Booking> bookingList;

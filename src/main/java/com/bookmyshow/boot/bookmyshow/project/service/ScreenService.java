@@ -1,5 +1,6 @@
 package com.bookmyshow.boot.bookmyshow.project.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.ScreenDao;
+import com.bookmyshow.boot.bookmyshow.project.dao.SeatDao;
 import com.bookmyshow.boot.bookmyshow.project.dao.TheatreDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Screen;
+import com.bookmyshow.boot.bookmyshow.project.entity.Seat;
 import com.bookmyshow.boot.bookmyshow.project.entity.Status;
 import com.bookmyshow.boot.bookmyshow.project.entity.Theatre;
 import com.bookmyshow.boot.bookmyshow.project.exception.InvalidType;
 import com.bookmyshow.boot.bookmyshow.project.exception.ScreenNotFound;
+import com.bookmyshow.boot.bookmyshow.project.exception.SeatNotFound;
 import com.bookmyshow.boot.bookmyshow.project.exception.TheatreNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 @Service
@@ -25,6 +29,8 @@ public class ScreenService
 	@Autowired
 	TheatreDao theatreDao;
 	
+	@Autowired
+	SeatDao seatDao;
 	public ResponseEntity<ResponseStructure<Screen>> saveScreen(Screen screen)
 	{
 		ResponseStructure<Screen> structure=new ResponseStructure<Screen>();
@@ -136,5 +142,51 @@ public class ScreenService
 		
 		}
 		throw new ScreenNotFound("screen is not found for the given id");
+	}
+	
+	public ResponseEntity<ResponseStructure<Screen>> addSeatsToTheScreen(int screenId,int seatId)
+	{
+		Screen screen= screenDao.findScreen(screenId);
+		if (screen!=null) 
+		{
+			Seat seat=seatDao.findSeat(seatId);
+			if(seat!=null)
+			{
+				 List<Seat>screenSeat= screen.getSeatList();
+				 
+				 if(screenSeat!=null)
+				 {
+					  List<Seat>seatList=seatDao.findAllSeats();
+					  
+					  for (Seat seat2 : seatList) 
+					  {
+						  if(seat2.getSeatId()==seatId)
+						  {
+							  screenSeat.add(seat2);
+						  }
+						
+					   }
+					  
+					  screen.setSeatList(screenSeat);
+			      }
+				 else 
+				 {
+					List<Seat> newSeatList=new ArrayList<Seat>();
+					newSeatList.add(seat);
+					screen.setSeatList(newSeatList);
+				 }
+				 
+				 ResponseStructure<Screen> structure=new ResponseStructure<Screen>();
+				 structure.setMessage("seat assign to the screen");
+				 structure.setStatus(HttpStatus.OK.value());
+				 structure.setData(screenDao.updateScreen(screen, screenId));
+				 
+				 return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.OK);
+				 
+			}
+			throw new SeatNotFound("seat is not found for the given id");
+		}
+		throw new ScreenNotFound("Screen is not found for the given id");
+
 	}
 }

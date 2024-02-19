@@ -2,6 +2,8 @@ package com.bookmyshow.boot.bookmyshow.project.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +35,9 @@ public class Screen
 	private int totalNoOfSeats;
 	private String movieName;
 	private Status statusOfShow;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	List<Seat> seatList;
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Theatre theatre;

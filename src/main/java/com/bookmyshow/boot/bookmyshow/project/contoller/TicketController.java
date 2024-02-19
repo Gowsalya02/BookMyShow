@@ -60,5 +60,17 @@ public class TicketController
 	{
 		return ticketService.setSeatToTicket(ticketId, seatId);
 	}
+	
+	@PutMapping("removeseat")
+	public ResponseEntity<ResponseStructure<Ticket>> removeSeatFromTicket(int ticketId,int seatId)
+	{
+		return ticketService.removeSeatFromTicket(ticketId, seatId);
+	}
+	@PutMapping("assignbooking")
+	public ResponseEntity<ResponseStructure<Ticket>> setBookingToTicket(int ticketId,int bookingId)
+	{
+		return ticketService.setBookingToTicket(ticketId, bookingId);
+		
+	}
 
 }

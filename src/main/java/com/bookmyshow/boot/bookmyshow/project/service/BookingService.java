@@ -8,8 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bookmyshow.boot.bookmyshow.project.dao.BookingDao;
+import com.bookmyshow.boot.bookmyshow.project.dao.TicketDao;
 import com.bookmyshow.boot.bookmyshow.project.entity.Booking;
+import com.bookmyshow.boot.bookmyshow.project.entity.Ticket;
 import com.bookmyshow.boot.bookmyshow.project.exception.BookingNotDone;
+import com.bookmyshow.boot.bookmyshow.project.exception.TicketNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
 @Service
@@ -17,6 +20,8 @@ public class BookingService
 {
 	@Autowired
 	BookingDao bookingDao;
+	@Autowired
+	TicketDao ticketDao;
 	
 	public ResponseEntity<ResponseStructure<Booking>> saveBooking(Booking booking)
 	{
@@ -84,5 +89,31 @@ public class BookingService
 		throw new BookingNotDone("booking not done for the given id");
 	}
 
+	public ResponseEntity<ResponseStructure<Booking>> setTicketToBooking(int bookingId,int ticketId)
+	{
+		Booking booking= bookingDao.findBooking(bookingId);
+		if(booking!=null)
+		{
+		Ticket ticket=ticketDao.findTicket(ticketId);
+		if(ticket!=null)
+		{
+			
+				if(booking.getTicket().equals(null))
+				{
+					booking.setTicket(ticket);
+					ResponseStructure<Booking>structure=new ResponseStructure<Booking>();
+					structure.setMessage("booking is done for the ticket");
+					structure.setStatus(HttpStatus.OK.value());
+					structure.setData(bookingDao.updateBooking(booking, bookingId));
+					return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.OK);
+					
+				}
+				throw new TicketNotFound("this ticket already booked");
+			
+		}
+		throw new TicketNotFound("ticket object not found for the given id");
+		}
+		throw new BookingNotDone("booking is not found for the given Id");
+	}
 
 }

@@ -67,4 +67,10 @@ public class ScreenController
 	{
 		return screenService.addStatusToScreen(screenId, status);
 	}
+	
+	@PutMapping("assignseat")
+	public ResponseEntity<ResponseStructure<Screen>> addSeatsToTheScreen(int screenId,int seatId)
+	{
+		return screenService.addSeatsToTheScreen(screenId, seatId);
+	}
 }

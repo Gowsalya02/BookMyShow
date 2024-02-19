@@ -9,9 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.bookmyshow.boot.bookmyshow.project.dao.BookingDao;
 import com.bookmyshow.boot.bookmyshow.project.dao.UserDao;
 import com.bookmyshow.boot.bookmyshow.project.dto.UserDto;
+import com.bookmyshow.boot.bookmyshow.project.entity.Booking;
 import com.bookmyshow.boot.bookmyshow.project.entity.User;
+import com.bookmyshow.boot.bookmyshow.project.exception.BookingNotDone;
 import com.bookmyshow.boot.bookmyshow.project.exception.UserNotFound;
 import com.bookmyshow.boot.bookmyshow.project.util.ResponseStructure;
 
@@ -22,6 +25,9 @@ public class UserService
 	
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	BookingDao bookingDao;
 	
 	public ResponseEntity<ResponseStructure<UserDto>> saveUser(User user)
 	{
@@ -133,6 +139,54 @@ public class UserService
 			
 		}
 		throw new UserNotFound("user object not found for the given mail id");
+	}
+	
+	public ResponseEntity<ResponseStructure<UserDto>> setBookingToUser(String userMail,String userPassword,int bookingId)
+	{
+		
+	UserDto userDto=new UserDto();
+	
+	ModelMapper mapper=new ModelMapper();
+	ResponseEntity<ResponseStructure<UserDto>> userLogin= userLogin(userMail, userPassword);
+	if(userLogin.getBody().getData()!=null)
+	{
+		User exUser=userDao.findByMail(userMail);
+		Booking booking=bookingDao.findBooking(bookingId);
+		if(booking!=null)
+		{
+			List<Booking>userBooking= exUser.getBookingList();
+			if(userBooking!=null)
+			{
+				List<Booking>bookingList= bookingDao.findAllBooking();
+				for (Booking booking2 : bookingList) 
+				{
+					if(booking2.getBookingId()==bookingId)
+					{
+						userBooking.add(booking2);
+					}
+					
+				}
+				exUser.setBookingList(userBooking);
+				
+			}
+			else 
+			{
+				List<Booking>newUserBooking=new ArrayList<Booking>();
+				newUserBooking.add(bookingDao.findBooking(bookingId));
+				exUser.setBookingList(newUserBooking);
+			}
+			
+			mapper.map(userDao.updateUser(exUser, exUser.getUserId()),userDto);
+			ResponseStructure<UserDto>structure=new ResponseStructure<UserDto>();
+			structure.setMessage("Booking set to the user");
+			structure.setStatus(HttpStatus.OK.value());
+			structure.setData(userDto);
+			return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.OK);
+			
+		}
+		throw new BookingNotDone("Booking is not done for the given Id");
+	}
+	throw new UserNotFound("User not found for the given id");	
 	}
 	
 }

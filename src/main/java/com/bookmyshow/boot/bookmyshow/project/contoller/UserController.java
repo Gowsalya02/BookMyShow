@@ -57,5 +57,10 @@ public class UserController
 		return userService.userLogin(userMail, userPassword);
 	}
 
+	@PutMapping("assignbooking")
+	public ResponseEntity<ResponseStructure<UserDto>> setBookingToUser(String userMail,String userPassword,int bookingId)
+	{
+		return userService.setBookingToUser(userMail, userPassword, bookingId);
+	}
 
 }

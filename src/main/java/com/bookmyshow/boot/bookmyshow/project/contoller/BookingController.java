@@ -56,4 +56,10 @@ public class BookingController
 		return bookingService.findAllBookings();
 	}
 
+
+	@PutMapping("setticket")
+	public ResponseEntity<ResponseStructure<Booking>> setTicketToBooking(int bookingId,int ticketId)
+	{
+		return bookingService.setTicketToBooking(bookingId, ticketId);
+	}
 }
